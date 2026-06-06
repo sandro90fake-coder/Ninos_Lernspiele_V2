@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🚗 Auto Mathe-Rennen</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;800&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#111827;
+  --card:#1f2937;
+  --card2:#374151;
+  --gold:#fbbf24;
+  --sky:#60a5fa;
+  --green:#10b981;
+}
+body{font-family:'Baloo 2';background:var(--bg);color:white;text-align:center;}
+
+.start-title{
+  font-size:3rem;
+  background:linear-gradient(90deg,#1d4ed8,#38bdf8);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.btn{
+  padding:12px;
+  background:var(--sky);
+  border:none;
+  border-radius:10px;
+  color:white;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.car{
+  font-size:5rem;
+  animation:float 2s infinite;
+}
+
+@keyframes float{
+  50%{transform:translateY(-15px)}
+}
+</style>
+</head>
+
+<body>
+
+<div id="start">
+  <div class="car">🚗</div>
+  <div class="start-title">Auto Mathe-Rennen</div><br>
+
+  <input id="name" placeholder="Dein Name"><br><br>
+
+  <button class="btn" onclick="start()">Start Rennen 🚀</button>
+</div>
+
+<div id="game" style="display:none">
+
+<h2 id="title">🏁 Rennen läuft!</h2>
+
+<div style="font-size:2rem;margin:20px">
+<span id="task"></span>
+</div>
+
+<div id="answers"></div>
+
+<div style="margin-top:20px">
+Punkte: <span id="score">0</span>
+</div>
+
+<div id="msg" style="margin-top:20px"></div>
+
+</div>
+
+<script>
+
+let score=0;
+
+// ✅ Auto-Texte
+const correctMsgs=[
+ "Turbo! 🚗💨",
+ "Super gefahren! 🏁",
+ "Perfekt!",
+ "Mega Speed!"
+];
+
+const wrongMsgs=[
+ "Oops! Bremse!",
+ "Fast erwischt!",
+ "Nochmal Gas geben!"
+];
+
+// Start
+function start(){
+ document.getElementById("start").style.display="none";
+ document.getElementById("game").style.display="block";
+ next();
+}
+
+// Aufgabe
+function next(){
+
+ let a=Math.floor(Math.random()*10)+1;
+ let b=Math.floor(Math.random()*10)+1;
+
+ let result=a+b;
+
+ document.getElementById("task").innerText=${a} + ${b} = ?;
+
+ let answers=[result];
+
+ while(answers.length<4){
+  let fake=result+(Math.floor(Math.random()*5)-2);
+  if(fake>=0 && !answers.includes(fake)) answers.push(fake);
+ }
+
+ answers.sort(()=>Math.random()-0.5);
+
+ let html="";
+ answers.forEach(v=>{
+  html+=<button class="btn" onclick="check(${v},${result})">${v}</button><br><br>;
+ });
+
+ document.getElementById("answers").innerHTML=html;
+}
+
+// Check
+function check(v,correct){
+
+ if(v===correct){
+   score+=10;
+   document.getElementById("msg").innerText=
+   correctMsgs[Math.floor(Math.random()*correctMsgs.length)];
+ } else {
+   document.getElementById("msg").innerText=
+   wrongMsgs[Math.floor(Math.random()*wrongMsgs.length)];
+ }
+
+ document.getElementById("score").innerText=score;
+
+ setTimeout(next,1000);
+}
+
+</script>
+</body>
+</html>
